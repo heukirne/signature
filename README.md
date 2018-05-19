@@ -7,5 +7,5 @@ Searching Signature in Files
 git clone https://github.com/heukirne/signature
 cd signature
 gcc antivirus.c -o antivirus
-./antivirus
+./antivirus signature < file_list.txt
 ```
