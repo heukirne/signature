@@ -6,7 +6,8 @@
 #include <errno.h>
 
 // Define uma constante para verificar os arquivos gzip
-const unsigned short gzip = 0x1f8b;
+const unsigned short gzip_byte1 = 0x1f;
+const unsigned short gzip_byte2 = 0x8b;
 
 // Comeca funcao principal
 int main(int argc, char* argv[]) {
@@ -33,12 +34,14 @@ int main(int argc, char* argv[]) {
 		if( access( line, F_OK ) != -1 ) {
 
 			FILE *file;
-			unsigned char in[2];
+			unsigned char file_byte1[1];
+			unsigned char file_byte2[1];
 
 			file = fopen(line, "r");
-			fread(&in, 1, 2, file);
+			fread(&file_byte1, 1, 1, file);
+			//fread(&file_byte2, 2, 1, file);
 
-			if(memcmp(in, &gzip, 2) == 0) {
+			if(memcmp(file_byte1, &gzip_byte1, 1) == 0) {
 				printf("Arquivo %s compactado\n", line);
 			} else {
 				printf("Arquivo %s nao compactado\n", line);
