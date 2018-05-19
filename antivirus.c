@@ -22,8 +22,15 @@ int main(int argc, char* argv[]) {
     size_t size;
     while (getline(&line, &size, stdin) != -1)
     {
+    	// Remove quebra de linha do nome do arquivo
+    	char *temp = NULL;
+    	if ((temp = strstr(line, "\n")) != NULL) {
+    		int len = strlen(line);
+    		line[len-1] = '\0';
+    	}
 
-		if( access( line, F_OK ) != -1 ) {// file exists
+    	// Verifica se o arquivo existe
+		if( access( line, F_OK ) != -1 ) {
 
 			FILE *file;
 			unsigned char in[2];
@@ -38,7 +45,7 @@ int main(int argc, char* argv[]) {
 			}
 
 
-		} else { // file doesn't exists
+		} else { //Se o arquivo não existe
 			printf("Arquivo %s nao encontrado!\n", line);
 		}
 
