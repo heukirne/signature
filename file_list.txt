@@ -1,3 +1,5 @@
 antivirus.c
+arquivonao.existe
 README.md.gz
+notfound.txt
 README.md

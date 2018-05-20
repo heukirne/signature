@@ -53,15 +53,33 @@ int main(int argc, char* argv[]) {
 
 			// Verifica se o arquivo esta compactado
 			if(memcmp(file_byte1, &gzip_byte1, 1) == 0) {
-				printf("Arquivo %s compactado\n", arquivo);
+				// printf("Arquivo %s compactado\n", arquivo);
+
+				char buffer[2048];
+				char command[124] = "gzip -dc ";
+
+				// Concatena commando com nome do arquivo
+				strcat(command, arquivo);
+				FILE *fp = popen(command,"r");
+
+				// Le arquivo compactado
+				while (fgets(buffer,2048,fp)) 
+				{
+					// Procura assinatura do virus
+			    	if ((temp = strstr(buffer, signature)) != NULL) {
+			    		found = 1;
+			    	}
+				}
+
 			} else {
-				printf("Arquivo %s nao compactado\n", arquivo);
+				// printf("Arquivo %s nao compactado\n", arquivo);
 
 				// 	Le cada linha do arquivos
 			    char *linha = NULL;
 			    size_t tamanho;
 			    while (getline(&linha, &tamanho, file) != -1)
 			    {
+			    	// Procura assinatura do virus
 			    	if ((temp = strstr(linha, signature)) != NULL) {
 			    		found = 1;
 			    	}
@@ -69,10 +87,11 @@ int main(int argc, char* argv[]) {
 
 			}
 
+			// Imprime mensagem de acordo com resultado do arquivos
 			if (found == 1) {
 				fprintf( stderr, "Arquivo %s contem a assinatura do virus\n", arquivo);
 			} else {
-				fprintf( stdout, "Arquivo %s não contem a assinatura do virus\n", arquivo);
+				fprintf( stdout, "Arquivo %s nao contem a assinatura do virus\n", arquivo);
 			}
 
 		} else { //Se o arquivo não existe
